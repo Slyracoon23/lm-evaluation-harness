@@ -1,0 +1,1567 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A framework for evaluating language models">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/EleutherAI/lm-evaluation-harness/new_task_guide/">
+      
+      
+        <link rel="prev" href="../interface/">
+      
+      
+        <link rel="next" href="../task_guide/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
+    
+    
+      
+        <title>New Task Guide - LM Evaluation Harness</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#new-task-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LM Evaluation Harness" class="md-header__button md-logo" aria-label="LM Evaluation Harness" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LM Evaluation Harness
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              New Task Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EleutherAI/lm-evaluation-harness" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EleutherAI/lm-evaluation-harness
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LM Evaluation Harness" class="md-nav__button md-logo" aria-label="LM Evaluation Harness" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LM Evaluation Harness
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EleutherAI/lm-evaluation-harness" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EleutherAI/lm-evaluation-harness
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Documentation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interface
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    New Task Guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    New Task Guide
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-yaml-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a YAML file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a YAML file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecting-and-configuring-a-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selecting and configuring a dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-local-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Local Datasets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-prompt-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a Prompt Template
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a Prompt Template">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writing-a-prompt-with-jinja-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a prompt with Jinja 2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a prompt with Jinja 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-choice-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple choice format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-python-functions-for-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Python Functions for Prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#importing-a-prompt-from-promptsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Importing a Prompt from Promptsource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-more-advanced-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional, More Advanced Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-name-tags-registering-a-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task name + tags (registering a task)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-group-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Group Configs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-python-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring python classes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beautifying-table-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      Beautifying Table Display
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-validity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking validity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-performance-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking performance + equivalence
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking performance + equivalence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-validity-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task Validity Checklist
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-your-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      Submitting your task
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../task_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Task Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decontamination/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Decontamination
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat-template-readme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat Templates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/api_models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hf_vlms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HF VLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-yaml-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a YAML file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a YAML file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selecting-and-configuring-a-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selecting and configuring a dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-local-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Local Datasets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-prompt-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a Prompt Template
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a Prompt Template">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writing-a-prompt-with-jinja-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing a prompt with Jinja 2
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Writing a prompt with Jinja 2">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-choice-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple choice format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-python-functions-for-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Python Functions for Prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#importing-a-prompt-from-promptsource" class="md-nav__link">
+    <span class="md-ellipsis">
+      Importing a Prompt from Promptsource
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-more-advanced-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional, More Advanced Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-name-tags-registering-a-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task name + tags (registering a task)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-group-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Group Configs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuring-python-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring python classes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beautifying-table-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      Beautifying Table Display
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-validity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking validity
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-performance-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking performance + equivalence
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking performance + equivalence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-validity-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task Validity Checklist
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submitting-your-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      Submitting your task
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="new-task-guide">New Task Guide<a class="headerlink" href="#new-task-guide" title="Permanent link">&para;</a></h1>
+<p><code>lm-evaluation-harness</code> is a framework that strives to support a wide range of zero- and few-shot evaluation tasks on autoregressive language models (LMs).</p>
+<p>This documentation page provides a walkthrough to get started creating your own task, in <code>lm-eval</code> versions v0.4.0 and later.</p>
+<p>A more interactive tutorial is available as a Jupyter notebook <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/examples/lm-eval-overview.ipynb">here</a>.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p>If you haven't already, go ahead and fork the main repo, clone it, create a branch with the name of your task, and install the project requirements in your environment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># After forking...</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/&lt;YOUR-USERNAME&gt;/lm-evaluation-harness.git
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>lm-evaluation-harness
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;task-name&gt;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</code></pre></div>
+<p>In this document, we'll walk through the basics of implementing a static benchmark evaluation in two formats: a <em>generative</em> task which requires sampling text from a model, such as <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k.yaml"><code>gsm8k</code></a>, and a <em>discriminative</em>, or <em>multiple choice</em>, task where the model picks the most likely of several fixed answer choices, such as <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/sciq/sciq.yaml"><code>sciq</code></a>.</p>
+<h2 id="creating-a-yaml-file">Creating a YAML file<a class="headerlink" href="#creating-a-yaml-file" title="Permanent link">&para;</a></h2>
+<p>To implement a new standard task, we'll need to write a YAML file which configures our task logic. We start by making a new empty YAML file. This file can have any name, but we recommend placing it in a subfolder of <code>lm_eval/tasks</code> titled by the dataset or task's shorthand name: for example,</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>touch<span class="w"> </span>lm_eval/tasks/&lt;dataset_name&gt;/&lt;my_new_task_name&gt;.yaml
+</code></pre></div>
+<p>Or, copy the template subfolder we provide from <code>templates/new_yaml_task</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>-r<span class="w"> </span>templates/new_yaml_task<span class="w"> </span>lm_eval/tasks/
+</code></pre></div>
+<p>and rename the folders and YAML file(s) as desired.</p>
+<h3 id="selecting-and-configuring-a-dataset">Selecting and configuring a dataset<a class="headerlink" href="#selecting-and-configuring-a-dataset" title="Permanent link">&para;</a></h3>
+<p>All data downloading and management is handled through the HuggingFace (<strong>HF</strong>) <a href="https://github.com/huggingface/datasets"><code>datasets</code></a> API. So, the first thing you should do is check to see if your task's dataset is already provided in their catalog <a href="https://huggingface.co/datasets">here</a>. If it's not in there, please consider adding it to their Hub to make it accessible to a wider user base by following their <a href="https://github.com/huggingface/datasets/blob/main/ADD_NEW_DATASET.md">new dataset guide</a>
+.</p>
+<blockquote>
+<p>[!TIP]
+To test your task, we recommend using verbose logging using <code>export LOGLEVEL = DEBUG</code> in your shell before running the evaluation script. This will help you debug any issues that may arise.
+Once you have a HuggingFace dataset prepared for your task, we want to assign our new YAML to use this dataset:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">dataset_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># the name of the dataset on the HF Hub.</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span><span class="c1"># the dataset configuration to use. Leave `null` if your dataset does not require a config to be passed. See https://huggingface.co/docs/datasets/load_hub#configurations for more info.</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">dataset_kwargs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w"> </span><span class="c1"># any extra keyword arguments that should be passed to the dataset constructor, e.g. `data_dir`.</span>
+</code></pre></div>
+<p>Next, we'd like to tell our task what the dataset's train, validation, and test splits are named, if they exist:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">training_split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;split name of training set, or `null`&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">validation_split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;split name of val. set, or `null`&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">test_split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;split name of test set, or `null`&gt;</span>
+</code></pre></div>
+<p>Tests will run on the <code>test_split</code> if it is available, and otherwise evaluate on the <code>validation_split</code>.</p>
+<p>We can also specify from which split the task should retrieve few-shot examples via:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">fewshot_split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;split name to draw fewshot examples from, or `null`&gt;</span>
+</code></pre></div>
+<p>or by hardcoding them, either using the following in the yaml file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">fewshot_config</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">sampler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">first_n</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">samples</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="p p-Indicator">{</span><span class="nv">&lt;sample 1&gt;</span><span class="p p-Indicator">},</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="p p-Indicator">{</span><span class="nv">&lt;sample 2&gt;</span><span class="p p-Indicator">},</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>or by adding the function <code>list_fewshot_samples</code> in the associated utils.py file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_fewshot_samples</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  <span class="k">return</span> <span class="p">[{</span><span class="o">&lt;</span><span class="n">sample</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">},</span> <span class="p">{</span><span class="o">&lt;</span><span class="n">sample</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">}]</span>
+</code></pre></div>
+<p>See <code>lm_eval/tasks/minerva_math/minerva_math_algebra.yaml</code> for an example of the latter, and <code>lm_eval/tasks/gsm8k/gsm8k-cot.yaml</code> for an example of the former.</p>
+<p>In this case, each sample must contain the same fields as the samples in the above sets--for example, if <code>doc_to_text</code> expects an <code>input</code> field when rendering input prompts, these provided samples must include an <code>input</code> key.</p>
+<p>If neither above options are not set, we will default to train/validation/test sets, in that order.</p>
+<p>Finally, our dataset may not be already in the exact format we want. Maybe we have to strip whitespace and special characters via a regex from our dataset's "question" field! Or maybe we just want to rename its columns to match a convention we'll be using for our prompts.</p>
+<p>Let's create a python file in the directory where we're writing our YAML file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>touch<span class="w"> </span>lm_eval/tasks/&lt;dataset_name&gt;/utils.py
+</code></pre></div>
+<p>Now, in <code>utils.py</code> we'll write a function to process each split of our dataset (the following example is drawn from <a href="../lm_eval/tasks/hellaswag/utils.py">the <code>hellaswag</code> task</a>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process_docs</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_process_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        <span class="n">ctx</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;ctx_a&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;ctx_b&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="n">out_doc</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;activity_label&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="n">ctx</span><span class="p">),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            <span class="s2">&quot;choices&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">preprocess</span><span class="p">(</span><span class="n">ending</span><span class="p">)</span> <span class="k">for</span> <span class="n">ending</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;endings&quot;</span><span class="p">]],</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="s2">&quot;gold&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]),</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>        <span class="p">}</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="k">return</span> <span class="n">out_doc</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_process_doc</span><span class="p">)</span>
+</code></pre></div>
+<p>Now, in our YAML config file we'll use the <code>!function</code> constructor, and tell the config where our imported Python function will come from. At runtime, before doing anything else we will preprocess our dataset according to this function!</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">process_docs</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">utils.process_docs</span>
+</code></pre></div>
+<h3 id="using-local-datasets">Using Local Datasets<a class="headerlink" href="#using-local-datasets" title="Permanent link">&para;</a></h3>
+<p>To load a local dataset for evaluation, you can specify data files in the <code>dataset_kwargs</code> field, such as the following for JSON files:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">dataset_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">json</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nt">dataset_kwargs</span><span class="p">:</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">data_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/my/json</span>
+</code></pre></div>
+<p>Or with files already split into separate directories:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">dataset_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arrow</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">dataset_kwargs</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">data_files</span><span class="p">:</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/arrow/train/data-00000-of-00001.arrow</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nt">validation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/arrow/validation/data-00000-of-00001.arrow</span>
+</code></pre></div>
+<p>Alternatively, if you have previously downloaded a dataset from huggingface hub (using <code>save_to_disk()</code>) and wish to use the local files, you will need to use <code>data_dir</code> under <code>dataset_kwargs</code> to point to where the directory is.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">dataset_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hellaswag</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">dataset_kwargs</span><span class="p">:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">data_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hellaswag_local/</span>
+</code></pre></div>
+<p>You can also set <code>dataset_path</code> as a directory path in your local system. This will assume that there is a loading script with the same name as the directory. <a href="https://huggingface.co/docs/datasets/loading#local-loading-script">See datasets docs</a>.</p>
+<h2 id="writing-a-prompt-template">Writing a Prompt Template<a class="headerlink" href="#writing-a-prompt-template" title="Permanent link">&para;</a></h2>
+<p>The next thing we need to do is decide what format to use when presenting the data to the LM. This is our <strong>prompt</strong>, where we'll define both an input and output format.</p>
+<p>To write a prompt, users will use <code>doc_to_text</code>, <code>doc_to_target</code>, and <code>doc_to_choice</code> (Optional when certain conditions are met).</p>
+<p><code>doc_to_text</code> defines the input string a model will be given while <code>doc_to_target</code> and <code>doc_to_choice</code> will be used to generate the target text. <code>doc_to_target</code> can be either a text string that refers to the target string or an integer that refers to the index of the correct label. When it is set as an index, <code>doc_to_choice</code> must also be set with the appropriate list of possible choice strings.</p>
+<h3 id="basic-prompts">Basic prompts<a class="headerlink" href="#basic-prompts" title="Permanent link">&para;</a></h3>
+<p>If a dataset is straightforward enough, users can enter the feature name directly. This assumes that no preprocessing is required. For example in <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/1710b42d52d0f327cb0eb3cb1bfbbeca992836ca/lm_eval/tasks/swag/swag.yaml#L10-L11">Swag</a>, <code>doc_to_text</code> and <code>doc_to_target</code> given the name of one of the feature each.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">doc_to_text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">startphrase</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">label</span>
+</code></pre></div>
+<p>Hard-coding is also possible as is the case in <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/1710b42d52d0f327cb0eb3cb1bfbbeca992836ca/lm_eval/tasks/sciq/sciq.yaml#L11">SciQ</a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+</code></pre></div>
+<p><code>doc_to_choice</code> can be directly given a list of text as option (See <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/1710b42d52d0f327cb0eb3cb1bfbbeca992836ca/lm_eval/tasks/toxigen/toxigen.yaml#L11">Toxigen</a>)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">doc_to_choice</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;No&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;Yes&#39;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>if a dataset feature is already a list, you can set the name of the feature as <code>doc_to_choice</code> (See <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/e0eda4d3ffa10e5f65e0976161cd134bec61983a/lm_eval/tasks/hellaswag/hellaswag.yaml#L13">Hellaswag</a>)</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">doc_to_choice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">choices</span>
+</code></pre></div>
+<h3 id="writing-a-prompt-with-jinja-2">Writing a prompt with Jinja 2<a class="headerlink" href="#writing-a-prompt-with-jinja-2" title="Permanent link">&para;</a></h3>
+<p>We support the <a href="https://jinja.palletsprojects.com/en/3.1.x/">Jinja 2</a> templating language for writing prompts. In practice, this means you can take your dataset's columns and do many basic string manipulations to place each document into prompted format.</p>
+<p>Take for example the dataset <code>super_glue/boolq</code>. As input, we'd like to use the features <code>passage</code> and <code>question</code> and string them together so that for a sample line <code>doc</code>, the model sees something in the format of:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>doc[&quot;passage&quot;]
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>Question: doc[&quot;question&quot;]?
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>Answer:
+</code></pre></div>
+<p>We do this by <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/1710b42d52d0f327cb0eb3cb1bfbbeca992836ca/lm_eval/tasks/super_glue/boolq/default.yaml#L9C1-L9C61">writing</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">doc_to_text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{passage}}\nQuestion:</span><span class="nv"> </span><span class="s">{{question}}?\nAnswer:&quot;</span>
+</code></pre></div>
+<p>Such that <code>{{passage}}</code> will be replaced by <code>doc["passage"]</code> and <code>{{question}}</code> with <code>doc["question"]</code> when rendering the prompt template.</p>
+<p>Our intended output is for the model to predict a single whitespace, and then the answer to the question. We do this via:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{answer}}&quot;</span>
+</code></pre></div>
+<blockquote>
+<p>[!WARNING]
+We add <code>target_delimiter</code> between input and target which defaults to " ", such that the full input-output string is <code>doc_to_text(doc) + target_delimiter + doc_to_target(doc)</code>. <code>doc_to_text</code> and <code>doc_to_target</code> should not contain trailing right or left whitespace, respectively. For multiple choice the target will be each choice index concatenated with the delimiter.</p>
+</blockquote>
+<h4 id="multiple-choice-format">Multiple choice format<a class="headerlink" href="#multiple-choice-format" title="Permanent link">&para;</a></h4>
+<p>For tasks which are multiple choice (a fixed, finite set of label words per each document) and evaluated via comparing loglikelihoods of all label words (the <code>multiple_choice</code> task output type) we enforce a particular convention on prompt format.</p>
+<p>An annotated example in the case of SciQ is as follows:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">doc_to_text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{support.lstrip()}}\nQuestion:</span><span class="nv"> </span><span class="s">{{question}}\nAnswer:&quot;</span><span class="w"> </span><span class="c1"># This is the input portion of the prompt for this doc. It will have &quot; {{choice}}&quot; appended to it as target for each choice in answer_choices.</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"> </span><span class="c1"># this contains the index into the answer choice list of the correct answer.</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="nt">doc_to_choice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{[distractor1,</span><span class="nv"> </span><span class="s">distractor2,</span><span class="nv"> </span><span class="s">distractor3,</span><span class="nv"> </span><span class="s">correct_answer]}}&quot;</span>
+</code></pre></div>
+<p>Task implementers are thus able to decide what the answer choices should be for a document, and what prompt format to use.</p>
+<p>The label index can also be sourced from a feature directly. For example in <code>superglue/boolq</code>, the label index if defined in the feature <code>label</code>. We can set <code>doc_to_target</code> as simply <code>label</code>. The options or verbalizers can be written in the form of a list <code>["no", "yes"]</code> that will correspond to the label index.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">doc_to_text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{passage}}\nQuestion:</span><span class="nv"> </span><span class="s">{{question}}?\nAnswer:&quot;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">label</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="nt">doc_to_choice</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;no&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;yes&quot;</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h3 id="using-python-functions-for-prompts">Using Python Functions for Prompts<a class="headerlink" href="#using-python-functions-for-prompts" title="Permanent link">&para;</a></h3>
+<p>There may be cases where the prompt we want to implement is easier expressed in Python instead of Jinja 2. For this, we can use Python helper functions that are defined in the YAML config. It should be noted that the function script must be in the same directory as the yaml.</p>
+<p>A good example is WikiText that requires a lot of regex rules to clean the samples.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">wikitext_detokenizer</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="n">string</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    <span class="c1"># contractions</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;s &#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;s&#39;&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="n">string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/&#39; [0-9]/&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;/&#39;[0-9]/&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>    <span class="o">...</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>    <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;s&quot;</span><span class="p">)</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>    <span class="k">return</span> <span class="n">string</span>
+</code></pre></div>
+<p>We can load this function in <code>doc_to_target</code> by using a <code>!function</code> operator after <code>doc_to_target</code> and followed by <code>&lt;file name&gt;.&lt;function name&gt;</code>. In the file <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/wikitext/wikitext.yaml">wikitext.yaml</a> we write:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">doc_to_target</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">preprocess_wikitext.wikitext_detokenizer</span>
+</code></pre></div>
+<h3 id="importing-a-prompt-from-promptsource">Importing a Prompt from Promptsource<a class="headerlink" href="#importing-a-prompt-from-promptsource" title="Permanent link">&para;</a></h3>
+<p><a href="https://github.com/bigscience-workshop/promptsource/tree/main/promptsource">Promptsource</a> is a great repository for crowdsourced prompts for many datasets. We can load these prompts easily by using the <code>use_prompt</code> argument and filling it with the format <code>"promptsource:&lt;name of prompt template&gt;"</code>. To use this, <code>doc_to_text</code> and <code>doc_to_target</code> should be left undefined. This will fetch the template of the dataset defined in the YAML file.</p>
+<p>For example, For Super Glue BoolQ, if we want to use the prompt template <code>GPT-3 Style</code> we can add this to the YAML file.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">use_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;promptsource:GPT-3</span><span class="nv"> </span><span class="s">Style&quot;</span>
+</code></pre></div>
+<p>If you would like to run evaluation on all prompt templates, you can simply call it this way.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nt">use_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;promptsource:*&quot;</span>
+</code></pre></div>
+<h3 id="setting-metrics">Setting metrics<a class="headerlink" href="#setting-metrics" title="Permanent link">&para;</a></h3>
+<p>You're almost done! Now we need to choose how to score our task.</p>
+<ul>
+<li><em>If this is a multiple choice task:</em> do you just want to check your model's accuracy in choosing the correct answer choice?</li>
+<li><em>If this is a generation task:</em> do you just want to check how often your model outputs <em>exactly the ground-truth output string provided</em>?</li>
+</ul>
+<p>If the answer to the above is no: you'll need to record what scoring metrics to use! Metrics can be listed in the following format:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">metric_list</span><span class="p">:</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the metric here&gt;</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the aggregation fn here&gt;</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;true or false&gt;</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">script.function</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">    </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p><code>aggregation</code> and <code>higher_is_better</code> can optionally be left out to default to the manually-set defaults if using a natively supported metric, otherwise it must be defined explicitly (for example, when using a custom metric implemented as a function).</p>
+<p>For a full list of natively supported metrics and aggregation functions see <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/docs/task_guide.md"><code>docs/task_guide.md</code></a>. All metrics supported in <a href="https://github.com/huggingface/evaluate/tree/main/metrics">HuggingFace Evaluate</a> can also be used, and will be loaded if a given metric name is not one natively supported in <code>lm-eval</code> or <code>hf_evaluate</code> is set to <code>true</code>.</p>
+<h3 id="optional-more-advanced-setup">Optional, More Advanced Setup<a class="headerlink" href="#optional-more-advanced-setup" title="Permanent link">&para;</a></h3>
+<p>Some tasks may require more advanced processing logic than is described in this guide.</p>
+<p>As a heuristic check:</p>
+<ul>
+<li>Does your task require generating multiple free-form outputs per input document?</li>
+<li>Does your task require complex, multi-step post-processing of generated model outputs?</li>
+<li>Does your task require subsetting documents on the fly based on their content?</li>
+<li>Do you expect to compute metrics after applying multiple such processing steps on your model outputs?</li>
+<li>Does your task rely on metrics that need a custom implementation?</li>
+</ul>
+<p>For more detail on the task system and advanced features, see <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/docs/task_guide.md"><code>docs/task_guide.md</code></a>. If none of the above sounds like they apply to your task, it's time to continue onto checking your task performance!</p>
+<h3 id="task-name-tags-registering-a-task">Task name + tags (registering a task)<a class="headerlink" href="#task-name-tags-registering-a-task" title="Permanent link">&para;</a></h3>
+<p>To test a task conveniently, it helps to <em>register</em> the task--that is, to give it a name and make the <code>lm-eval</code> library aware it exists!</p>
+<p>If you're writing your YAML file inside the <code>lm_eval/tasks</code> folder, you just need to give your task a name! You can do this inside your YAML file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;name of the task&gt;</span>
+</code></pre></div>
+<p>Including a task name is mandatory.</p>
+<p>It is often also convenient to label your task with several <code>tag</code> values, though this field is optional:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nt">tag</span><span class="p">:</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag1</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tag2</span>
+</code></pre></div>
+<p>This will add your task to the <code>tag1</code> and <code>tag2</code> tags, enabling people to know how to categorize your task, and if desired run all tasks in one of these groups at once, your task along with them.</p>
+<p>If your task is not in the <code>lm_eval/tasks</code> folder, you'll need to tell the Eval Harness where to look for YAML files.</p>
+<p>You can do this via the <code>--include_path</code> argument in <code>__main__.py</code>. This command will be used to initialize the <code>TaskManager</code> object which you can also use for your custom scripts.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">task_manager</span> <span class="o">=</span> <span class="n">TaskManager</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">verbosity</span><span class="p">,</span> <span class="n">include_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">include_path</span><span class="p">)</span>
+</code></pre></div>
+<p>Passing <code>--tasks /path/to/yaml/file</code> is also accepted.</p>
+<h3 id="advanced-group-configs">Advanced Group Configs<a class="headerlink" href="#advanced-group-configs" title="Permanent link">&para;</a></h3>
+<p>While <code>tag</code> values are helpful when you want to be able to quickly and conveniently run a set of related tasks via <code>--tasks my_tag_name</code>, often, we wish to implement more complex logic. For example, the MMLU benchmark contains 57 <em>subtasks</em> that must all be <em>averaged</em> together in order to report a final 'MMLU score'.</p>
+<p>Groupings of tasks might also use particular variants of a task--for example, we might want to default to evaluating a task as 5-shot when called as part of a given grouping, but not have a preference for number of shots when evaluating it as a standalone.</p>
+<p>We implement this via <strong>groups</strong>, which are distinct from tags. Groups can be implemented via <em>group config</em> YAML files, which are laid out similarly but slightly differently to tasks' YAML configs.</p>
+<p>The most basic form of group can be defined via a YAML config similar to the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nli_tasks</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="nt">task</span><span class="p">:</span>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cb</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anli_r1</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rte</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+</code></pre></div>
+<p>This will behave almost identically to a <code>tag</code> that includes these 3 tasks, but with one key distinction: we'll print the <code>nli_tasks</code> group as a row (with no associated metrics) in our table of outputs, and visually show that these 3 tasks appear under its subheader.</p>
+<p>Now, let's assume we actually want to report an aggregate score for <code>nli_tasks</code>. We would instead use a YAML config like the following:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nli_tasks</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="nt">task</span><span class="p">:</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cb</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anli_r1</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rte</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="nt">aggregate_metric_list</span><span class="p">:</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acc</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">    </span><span class="nt">weight_by_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># defaults to `true`. Set this to `false` to do a &quot;macro&quot; average (taking each subtask&#39;s average accuracy, and summing those accuracies and dividing by 3)--by default we do a &quot;micro&quot; average (retain all subtasks&#39; per-document accuracies, and take the mean over all documents&#39; accuracies to get our aggregate mean).</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-32-11" name="__codelineno-32-11" href="#__codelineno-32-11"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+</code></pre></div>
+<p>Similar to our <code>metric_list</code> for listing out the metrics we want to calculate for a given task, we use an <code>aggregate_metric_list</code> field to specify which metric name to aggregate across subtasks, what aggregation function to use, and whether we should micro- or macro- average these metrics. See <a href="../task_guide/">./task_guide.md</a> for a full list of related sub-keys.</p>
+<p><strong>[!Tip]: currently, we predominantly only support the aggregation of group metrics that use <code>mean</code> (either micro- or macro- averaged) over their subtasks. If you require even more complex aggregation rules, you may want to perform aggregation offline.</strong></p>
+<p>Group configs can be fairly complex! We can do various operations, such as defining new subtask(s) inline in our group YAML, overriding an existing task's specific config value, or nesting existing groups within our</p>
+<p>For example, let's build a config for evaluating MMLU and a few natural language inference tasks. For MMLU, we can write the name for the benchmark as a subtask written under <code>task</code>. You can configure the parameters such as <code>num_fewshot</code>. If the task being configured is a group such as <code>mmlu</code> or <code>super_glue</code>, the parameter set will be applied to all of the subtasks.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nli_and_mmlu</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="nt">task</span><span class="p">:</span>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nli_tasks</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">    </span><span class="nt">task</span><span class="p">:</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cb</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">anli_r1</span>
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rte</span>
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="w">    </span><span class="nt">aggregate_metric_list</span><span class="p">:</span>
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acc</span>
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a><span class="w">        </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean</span>
+<a id="__codelineno-33-11" name="__codelineno-33-11" href="#__codelineno-33-11"></a><span class="w">        </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-33-12" name="__codelineno-33-12" href="#__codelineno-33-12"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mmlu</span>
+<a id="__codelineno-33-13" name="__codelineno-33-13" href="#__codelineno-33-13"></a><span class="w">    </span><span class="nt">num_fewshot</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</code></pre></div>
+<h3 id="configuring-python-classes">Configuring python classes<a class="headerlink" href="#configuring-python-classes" title="Permanent link">&para;</a></h3>
+<p>There can be occasions when yaml-based tasks cannot accommodate how a task is handled. LM-Eval supports the manually implementing tasks as was previously done before <code>0.4.x</code>. To register the task, you can simply make a yaml with the name of the task in <code>task</code> and the class object in <code>class</code> using the <code>!function</code> prefix.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">squadv2</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">task.SQuAD2</span>
+</code></pre></div>
+<p>This also applies to building group configurations with subtasks that are python classes.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scrolls</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="nt">task</span><span class="p">:</span>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scrolls_qasper</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">task.Qasper</span>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scrolls_quality</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a><span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">task.QuALITY</span>
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scrolls_narrativeqa</span>
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a><span class="w">    </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">task.NarrativeQA</span>
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p>You can also pass a custom argument to your class by accepting <code>config</code> in the custom class constructor.
+Here's how to do it:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20_newsgroups</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="kt">!function</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">task.Unitxt</span>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="nt">recipe</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">card=cards.20_newsgroups,template=templates.classification.multi_class.title</span>
+</code></pre></div>
+<p>In this example, <code>recipe</code> is the custom argument for the <code>Unitxt</code> class.</p>
+<h2 id="beautifying-table-display">Beautifying Table Display<a class="headerlink" href="#beautifying-table-display" title="Permanent link">&para;</a></h2>
+<p>To avoid conflict, each task needs to be registered with a unique name. Because of this, slight variations of task are still counted as unique tasks and need to be named uniquely. This could be done by appending an additional naming that may refer to the variation such as in MMLU where the template used to evaluated for flan are differentiated from the default by the prefix <code>mmlu_flan_*</code>. Printing the full task names can easily clutter the results table at the end of the evaluation especially when you have a long list of tasks or are using a benchmark that comprises of many tasks. To make it more legible, you can use <code>task_alias</code> and <code>group_alias</code> to provide an alternative task name and group name that will be printed. For example in <code>mmlu_abstract_algebra.yaml</code> we set <code>task_alias</code> to <code>abstract_algebra</code>. In group configs, a <code>group_alias</code> for a group can also be set.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="s">&quot;dataset_name&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;abstract_algebra&quot;</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="s">&quot;description&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">following</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">multiple</span><span class="nv"> </span><span class="s">choice</span><span class="nv"> </span><span class="s">questions</span><span class="nv"> </span><span class="s">(with</span><span class="nv"> </span><span class="s">answers)</span><span class="nv"> </span><span class="s">about</span><span class="nv"> </span><span class="s">abstract\</span>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">  </span><span class="s">\ algebra.\n\n&quot;</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="s">&quot;include&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;_default_template_yaml&quot;</span>
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="s">&quot;task&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;mmlu_abstract_algebra&quot;</span>
+<a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="s">&quot;task_alias&quot;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;abstract_algebra&quot;</span>
+</code></pre></div>
+<h2 id="checking-validity">Checking validity<a class="headerlink" href="#checking-validity" title="Permanent link">&para;</a></h2>
+<p>After registering your task, you can now check on your data downloading and verify that the few-shot samples look as intended. Run the following command with your desired args:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>python<span class="w"> </span>-m<span class="w"> </span>scripts.write_out<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">    </span>--output_base_path<span class="w"> </span>&lt;path&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="w">    </span>--tasks<span class="w"> </span>&lt;your-task-name&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="w">    </span>--sets<span class="w"> </span>&lt;train<span class="w"> </span><span class="p">|</span><span class="w"> </span>val<span class="w"> </span><span class="p">|</span><span class="w"> </span>test&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a><span class="w">    </span>--num_fewshot<span class="w"> </span>K<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="w">    </span>--num_examples<span class="w"> </span>N<span class="w"> </span><span class="se">\</span>
+</code></pre></div>
+<p>Open the file specified at the <code>--output_base_path &lt;path&gt;</code> and ensure it passes
+a simple eye test.</p>
+<h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>
+<p>One key feature in LM Evaluation Harness is the ability to version tasks and groups--that is, mark them with a specific version number that can be bumped whenever a breaking change is made.</p>
+<p>This version info can be provided by adding the following to your new task or group config file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</code></pre></div>
+<p>Now, whenever a change needs to be made to your task in the future, please increase the version number by 1 so that users can differentiate the different task iterations and versions.</p>
+<p>If you are incrementing a task's version, please also consider adding a changelog to the task's README.md noting the date, PR number, what version you have updated to, and a one-liner describing the change.</p>
+<p>for example,</p>
+<ul>
+<li>[Dec 25, 2023] (PR #999) Version 0.0 -&gt; 1.0: Fixed a bug with answer extraction that led to underestimated performance.</li>
+</ul>
+<h2 id="checking-performance-equivalence">Checking performance + equivalence<a class="headerlink" href="#checking-performance-equivalence" title="Permanent link">&para;</a></h2>
+<p>It's now time to check models' performance on your task! In the evaluation harness, we intend to support a wide range of evaluation tasks and setups, but prioritize the inclusion of already-proven benchmarks following the precise evaluation setups in the literature where possible.</p>
+<p>To enable this, we provide a checklist that should be completed when contributing a new task, to enable accurate book-keeping and to ensure that tasks added to the library are well-tested and, where applicable, precedented.</p>
+<h3 id="task-validity-checklist">Task Validity Checklist<a class="headerlink" href="#task-validity-checklist" title="Permanent link">&para;</a></h3>
+<p>The checklist is the following:</p>
+<p>For adding novel benchmarks/datasets to the library:</p>
+<ul>
+<li>[ ] Is the task an existing benchmark in the literature?</li>
+<li>[ ] Have you referenced the original paper that introduced the task?</li>
+<li>[ ] If yes, does the original paper provide a reference implementation? If so, have you checked against the reference implementation and documented how to run such a test?</li>
+</ul>
+<p>If other tasks on this dataset are already supported:</p>
+<ul>
+<li>[ ] Is the "Main" variant of this task clearly denoted?</li>
+<li>[ ] Have you provided a short sentence in a README on what each new variant adds / evaluates?</li>
+<li>[ ] Have you noted which, if any, published evaluation setups are matched by this variant?</li>
+</ul>
+<p>It is recommended to include a filled-out copy of this checklist in the README.md for the subfolder you are creating, if you have created a new subfolder in <code>lm_eval/tasks</code>.</p>
+<p><strong>Finally, please add a short description of your task(s), along with a link to its subfolder in lm_eval/tasks, to <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/README.md"><code>lm_eval/tasks/README.md</code></a> so that users can discover your task in the library, and follow the link to your README for more information about the variants supported, their task names, and the original source of the dataset and/or evaluation setup.</strong></p>
+<h2 id="submitting-your-task">Submitting your task<a class="headerlink" href="#submitting-your-task" title="Permanent link">&para;</a></h2>
+<p>You're all set! Now push your work and make a pull request to the <code>main</code> branch! Thanks for the contribution :). If there are any questions, please leave a message in the <code>#lm-thunderdome</code> channel on the EAI discord!</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.indexes", "navigation.top", "search.highlight", "search.share", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>

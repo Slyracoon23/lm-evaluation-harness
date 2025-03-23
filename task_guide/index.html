@@ -1,0 +1,1325 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A framework for evaluating language models">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/EleutherAI/lm-evaluation-harness/task_guide/">
+      
+      
+        <link rel="prev" href="../new_task_guide/">
+      
+      
+        <link rel="next" href="../decontamination/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
+    
+    
+      
+        <title>Task Guide - LM Evaluation Harness</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#task-configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LM Evaluation Harness" class="md-header__button md-logo" aria-label="LM Evaluation Harness" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LM Evaluation Harness
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Task Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EleutherAI/lm-evaluation-harness" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EleutherAI/lm-evaluation-harness
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LM Evaluation Harness" class="md-nav__button md-logo" aria-label="LM Evaluation Harness" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LM Evaluation Harness
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EleutherAI/lm-evaluation-harness" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    EleutherAI/lm-evaluation-harness
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Documentation
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Model Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interface
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../new_task_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    New Task Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Task Guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Task Guide
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-filter-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Filter Pipelines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-custom-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a custom filter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Embedded Python Code
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-longer-recommended-direct-task-subclassing" class="md-nav__link">
+    <span class="md-ellipsis">
+      (No Longer Recommended) Direct Task Subclassing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#including-a-base-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Including a Base YAML
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passing-arguments-to-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Arguments to Metrics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Passing Arguments to Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#natively-supported-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Natively Supported Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-multiple-choice-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a Multiple Choice Metric
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-reference-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Good Reference Tasks
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../decontamination/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Decontamination
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chat-template-readme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat Templates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Models
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/api_models/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hf_vlms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HF VLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-filter-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Filter Pipelines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-custom-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a custom filter
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embedded-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Embedded Python Code
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-longer-recommended-direct-task-subclassing" class="md-nav__link">
+    <span class="md-ellipsis">
+      (No Longer Recommended) Direct Task Subclassing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#including-a-base-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Including a Base YAML
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passing-arguments-to-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing Arguments to Metrics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Passing Arguments to Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#natively-supported-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Natively Supported Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-multiple-choice-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a Multiple Choice Metric
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-reference-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Good Reference Tasks
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="task-configuration">Task Configuration<a class="headerlink" href="#task-configuration" title="Permanent link">&para;</a></h1>
+<p>The <code>lm-evaluation-harness</code> is meant to be an extensible and flexible framework within which many different evaluation tasks can be defined. All tasks in the new version of the harness are built around a YAML configuration file format.</p>
+<p>These YAML configuration files, along with the current codebase commit hash, are intended to be shareable such that providing the YAML config enables another researcher to precisely replicate the evaluation setup used by another, in the case that the prompt or setup differs from standard <code>lm-eval</code> task implementations.</p>
+<p>While adding a standard evaluation task on a new dataset can be occasionally as simple as swapping out a Hugging Face dataset path in an existing file, more specialized evaluation setups also exist. Here we'll provide a crash course on the more advanced logic implementable in YAML form available to users.</p>
+<p>If your intended task relies on features beyond what is described in this guide, we'd love to hear about it! Feel free to open an issue describing the scenario on Github, create a PR to the project with a proposed implementation, or ask in the <code>#lm-thunderdome</code> channel on the EleutherAI discord.</p>
+<h2 id="configurations">Configurations<a class="headerlink" href="#configurations" title="Permanent link">&para;</a></h2>
+<p>Tasks are configured via the <code>TaskConfig</code> object. Below, we describe all fields usable within the object, and their role in defining a task.</p>
+<h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<p>Task naming + registration:</p>
+<ul>
+<li><strong>task</strong> (<code>str</code>, defaults to None) — name of the task.</li>
+<li><strong>task_alias</strong> (<code>str</code>, defaults to None) - Alias of the task name that will be printed in the final table results.</li>
+<li><strong>tag</strong> (<code>str</code>, <em>optional</em>) — name of the task tags(s) a task belongs to. Enables one to run all tasks with a specified tag name at once.</li>
+</ul>
+<p>Dataset configuration options:</p>
+<ul>
+<li><strong>dataset_path</strong> (<code>str</code>) — The name of the dataset as listed by HF in the datasets Hub.</li>
+<li><strong>dataset_name</strong>  (<code>str</code>, <em>optional</em>, defaults to None) — The name of what HF calls a “data instance” or sub-task of the benchmark. If your task does not contain any data instances, just leave this to default to None. (If you're familiar with the HF <code>datasets.load_dataset</code> function, these are just the first 2 arguments to it.)</li>
+<li><strong>dataset_kwargs</strong> (<code>dict</code>, <em>optional</em>) — Auxiliary arguments that <code>datasets.load_dataset</code> accepts. This can be used to specify arguments such as <code>data_files</code> or <code>data_dir</code> if you want to use local datafiles such as json or csv.</li>
+<li><strong>custom_dataset</strong> (<code>Callable</code>, *optional) - A function that returns a <code>dict[str, datasets.Dataset]</code> (<split_name>, dataset) object. This can be used to load a dataset from a custom source or to preprocess the dataset in a way that is not supported by the <code>datasets</code> library. Will have access to <code>metadata</code> field if defined (from config and passed to TaskManager), and <code>model_args</code> from runtime (if using <code>evaluate</code>).</li>
+<li><strong>training_split</strong> (<code>str</code>, <em>optional</em>) — Split in the dataset to use as the training split.</li>
+<li><strong>validation_split</strong> (<code>str</code>, <em>optional</em>) — Split in the dataset to use as the validation split.</li>
+<li><strong>test_split</strong> (<code>str</code>, <em>optional</em>) — Split in the dataset to use as the test split.</li>
+<li><strong>fewshot_split</strong> (<code>str</code>, <em>optional</em>) — Split in the dataset to draw few-shot exemplars from. assert that this not None if num_fewshot &gt; 0.</li>
+<li><strong>process_docs</strong> (<code>Callable</code>, <em>optional</em>) — Optionally define a function to apply to each HF dataset split, to preprocess all documents before being fed into prompt template rendering or other evaluation steps. Can be used to rename dataset columns, or to process documents into a format closer to the expected format expected by a prompt template.</li>
+</ul>
+<p>Prompting / in-context formatting options:</p>
+<ul>
+<li><strong>use_prompt</strong> (<code>str</code>, <em>optional</em>) — Name of prompt in promptsource to use. if defined, will overwrite doc_to_text, doc_to_target, and doc_to_choice.</li>
+<li><strong>description</strong> (<code>str</code>, <em>optional</em>) — An optional prepended Jinja2 template or string which will be prepended to the few-shot examples passed into the model, often describing the task or providing instructions to a model, such as <code>"The following are questions (with answers) about {{subject}}.\n\n"</code>. No delimiters or spacing are inserted between the description and the first few-shot example.</li>
+<li><strong>doc_to_text</strong> (<code>Union[Callable, str]</code>, <em>optional</em>) — Jinja2 template, string, or function to process a sample into the appropriate input for the model.</li>
+<li><strong>doc_to_target</strong> (<code>Union[Callable, str]</code>, <em>optional</em>) — Jinja2 template, string, or function to process a sample into the appropriate target output for the model. For multiple choice tasks, this should return an index into the answer choice list of the correct answer.</li>
+<li><strong>doc_to_choice</strong> (<code>Union[Callable, str]</code>, <em>optional</em>) — Jinja2 template, string, or function to process a sample into a list of possible string choices for <code>multiple_choice</code> tasks. Left undefined for <code>generate_until</code> tasks.</li>
+<li><strong>fewshot_delimiter</strong> (<code>str</code>, <em>optional</em>, defaults to "\n\n") — String to insert between few-shot examples.</li>
+<li><strong>target_delimiter</strong> (<code>str</code>, <em>optional</em>, defaults to <code>" "</code>) — String to insert between input and target output for the datapoint being tested.</li>
+<li><strong>gen_prefix</strong> (<code>str</code>, <em>optional</em>) — String to append after the &lt;|assistant|&gt; token. For example, if the task is to generate a question, the gen_prefix could be "The answer is: " to prompt the model to generate an answer to the question. If not using a chat template then this string will be appended to the end of the prompt.</li>
+</ul>
+<p>Runtime configuration options:</p>
+<ul>
+<li><strong>num_fewshot</strong> (<code>int</code>, <em>optional</em>, defaults to 0) — Number of few-shot examples before the input.</li>
+<li><strong>batch_size</strong> (<code>int</code>, <em>optional</em>, defaults to 1) — Batch size.</li>
+</ul>
+<p>Scoring details:</p>
+<ul>
+<li><strong>metric_list</strong> (<code>str</code>, <em>optional</em>, defaults to None) — A list of metrics to use for evaluation. See docs for expected format.</li>
+<li><strong>output_type</strong> (<code>str</code>, <em>optional</em>, defaults to "generate_until") — Selects the type of model output for the given task. Options are <code>generate_until</code>, <code>loglikelihood</code>, <code>loglikelihood_rolling</code>, and <code>multiple_choice</code>.</li>
+<li><strong>generation_kwargs</strong> (<code>dict</code>, <em>optional</em>) — Auxiliary arguments for the <code>generate</code> function from HF transformers library. Advanced keyword arguments may not be supported for non-HF LM classes.</li>
+<li><strong>repeats</strong> (<code>int</code>, <em>optional</em>, defaults to 1) — Number of repeated runs through model for each sample. Can be used for cases such as self-consistency.</li>
+<li><strong>filter_list</strong> (<code>Union[str, list]</code>, <em>optional</em>) — List of filters to postprocess model outputs. See below for further detail on the filter API.</li>
+<li><strong>should_decontaminate</strong> (<code>bool</code>, <em>optional</em>, defaults to False) - Whether to decontaminate or not.</li>
+<li><strong>doc_to_decontamination_query</strong> (<code>str</code>, <em>optional</em>) — Query for decontamination if <code>should_decontaminate</code> is True. If <code>should_decontaminate</code> is True but <code>doc_to_decontamination_query</code> is <code>None</code>, <code>doc_to_decontamination_query</code> will follow <code>doc_to_text</code>.</li>
+</ul>
+<p>Other:</p>
+<ul>
+<li><strong>metadata</strong> (<code>dict</code>, <em>optional</em>) — An optional field where arbitrary metadata can be passed. Most tasks should include a <code>version</code> key in this field that is used to denote the version of the yaml config. Other special metadata keys are: <code>num_fewshot</code>, to override the printed <code>n-shot</code> table column for a task. Will also be passed to the <code>custom_dataset</code> function if defined.</li>
+</ul>
+<h2 id="filters">Filters<a class="headerlink" href="#filters" title="Permanent link">&para;</a></h2>
+<p>A key component of the <code>lm-evaluation-harness</code> library is the <code>Filter</code> object. In a typical evaluation run of the harness, we take the formatted inputs and run them through our LM, with the appropriate output type (greedy or free-form generation, or loglikelihood-based comparative scoring).</p>
+<p>After getting scores or output text from our LM on each <code>Instance</code> or document in the dataset, we then need to feed these responses into a metric or scoring function to return scores to a user.</p>
+<p>However, certain tasks may require more complex behavior than directly turning over model outputs to a metric function. For example, we may want to post-process our output text by truncating it or extracting a model's answer, we may want to ensemble over multiple "takes" on a different document, et cetera.</p>
+<p><strong>Detailed Aside</strong>:
+We do such post-processing by operating on <em>responses</em>, which are stored after running an LM on an <code>Instance</code> from the task in <code>Instance.resps</code>.</p>
+<p><code>resps</code> is a <code>List[str]</code> for each instance, and we pass a <code>List[List[&lt;expected return type from model&gt;]]</code> to our filters that is a list of <code>[instance.resps for instance in instances]</code>.</p>
+<p>Our filters, after completing a pipeline, must return a <code>List[&lt;expected return type from model&gt;]</code> which we then unpack and store each element of in <code>Instance.filtered_resps</code> for the corresponding instance. Thus, we take as input a list of returns from our model for each doc, and must return a return from our model <em>without it being wrapped in a list</em> for each doc.
+<strong>End Aside</strong></p>
+<p>A full list of supported filter operations can be found in <code>lm_eval/filters/__init__.py</code>. Contributions of new filter types are welcome!</p>
+<h3 id="multiple-filter-pipelines">Multiple Filter Pipelines<a class="headerlink" href="#multiple-filter-pipelines" title="Permanent link">&para;</a></h3>
+<p>Tasks need not be limited to a single filter pipeline. We enable users to run multiple, distinct, filter pipelines on <em>the same model outputs</em> generated in one run on a task.</p>
+<p>As a case study, let's look at an implementation of solving the Gsm8k math word problem benchmark in <code>lm_eval/tasks/gsm8k/gsm8k-cot-self-consistency.yaml</code>. Here, we are emulating the setup used by <a href="https://arxiv.org/abs/2203.11171">Self-Consistency Improves Chain of Thought Prompting</a>, in which evaluation is performed by generating N chain-of-thought outputs from a model via temperature-based sampling, then selecting the answers output by the model at the end of the chains of thought, then majority voting across all those numeric answers.</p>
+<p>Within our YAML file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">...</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">repeats</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">filter_list</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;score-first&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;maj@64&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;majority_vote&quot;</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;maj@8&quot;</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first_k&quot;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="nt">k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;majority_vote&quot;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+</code></pre></div>
+<p>We are able to provide multiple different filter pipelines, each with their own name and list of filters to apply in sequence.</p>
+<p>Our first filter pipeline implements</p>
+<ul>
+<li>applying a regex to the model generations (extracting the number within the phrase "The answer is (number)")</li>
+<li>selecting only the first out of the 64 model answers</li>
+</ul>
+<p>Then scoring this single answer.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;score-first&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+</code></pre></div>
+<p>Our second filter pipeline, "maj@64", does majority voting across all 64 answers via:</p>
+<ul>
+<li>applying the same regex to all responses, to get the numerical answer from the model for each of the 64 responses per problem</li>
+<li>applying majority voting to all responses, which then returns a length-1 <code>[&lt;majority answer&gt;]</code> list for each</li>
+<li>taking the first element of this length-1 list, to then score the sole response <code>&lt;majority answer&gt;</code> for each document.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;maj@64&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;majority_vote&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+</code></pre></div>
+<p>Our final filter pipeline, "maj@8", does majority voting across the first 8 of the model's responses per document via:</p>
+<ul>
+<li>subsetting the len-64 list of responses <code>[answer1, answer2, ..., answer64]</code> to <code>[answer1, answer2, ..., answer8]</code> for each document</li>
+<li>performing the same sequence of filters on these new sets of 8 responses, for each document.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;maj@8&quot;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first_k&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;regex&quot;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span><span class="nt">regex_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;The</span><span class="nv"> </span><span class="s">answer</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">(\\-?[0-9\\.\\,]*[0-9]+)&quot;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;majority_vote&quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">function</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;take_first&quot;</span>
+</code></pre></div>
+<p>Thus, given the 64 responses from our LM on each document, we can report metrics on these responses in these 3 different ways, as defined by our filter pipelines.</p>
+<h3 id="adding-a-custom-filter">Adding a custom filter<a class="headerlink" href="#adding-a-custom-filter" title="Permanent link">&para;</a></h3>
+<p>Just like adding a custom model with <code>register_model</code> decorator one is able to do the same with filters, for example</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lm_eval.api.filter</span><span class="w"> </span><span class="kn">import</span> <span class="n">Filter</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">lm_eval.api.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_filter</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nd">@register_filter</span><span class="p">(</span><span class="s2">&quot;new_filter&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">NewFilter</span><span class="p">(</span><span class="n">Filter</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="o">...</span>
+</code></pre></div>
+<h2 id="embedded-python-code">Embedded Python Code<a class="headerlink" href="#embedded-python-code" title="Permanent link">&para;</a></h2>
+<p>Use can use python functions for certain arguments by using the <code>!function</code> operator after the argument name followed by <code>&lt;filename&gt;.&lt;pythonfunctionname&gt;</code>. This feature can be used for the following arguments:</p>
+<ol>
+<li><code>doc_to_text</code></li>
+<li><code>doc_to_target</code></li>
+<li><code>doc_to_choice</code></li>
+<li><code>aggregation</code> for a <code>metric</code> in <code>metric_list</code></li>
+</ol>
+<h2 id="no-longer-recommended-direct-task-subclassing">(No Longer Recommended) Direct <code>Task</code> Subclassing<a class="headerlink" href="#no-longer-recommended-direct-task-subclassing" title="Permanent link">&para;</a></h2>
+<p>The prior implementation method of new tasks was to subclass <code>Task</code>. While we intend to migrate all tasks to the new YAML implementation option going forward, it remains possible to subclass the Task class and implement custom logic. For more information, see <code>docs/task_guide.md</code> in v0.3.0 of the <code>lm-evaluation-harness</code>.</p>
+<h2 id="including-a-base-yaml">Including a Base YAML<a class="headerlink" href="#including-a-base-yaml" title="Permanent link">&para;</a></h2>
+<p>You can base a YAML on another YAML file as a template. This can be handy when you need to just change the prompt for <code>doc_to_text</code> but keep the rest the same or change <code>filters</code> to compare which is better. Simply use <code>include</code> in the YAML file and write the name of the template you want to base from. This assumes that the base template is in the same directory. Otherwise, You will need to define the full path.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;YAML filename or with full path&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nn">...</span>
+</code></pre></div>
+<p>You can find an example of how to use this feature at <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot-self-consistency.yaml">gsm8k-cot-self-consistency.yaml</a> where it is based off <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/gsm8k/gsm8k-cot.yaml">gsm8k-cot.yaml</a></p>
+<h2 id="passing-arguments-to-metrics">Passing Arguments to Metrics<a class="headerlink" href="#passing-arguments-to-metrics" title="Permanent link">&para;</a></h2>
+<p>Metrics can be defined in the <code>metric_list</code> argument when building the YAML config. Multiple metrics can be listed along with any auxiliary arguments. For example, setting the <a href="https://github.com/huggingface/evaluate/tree/main/metrics/exact_match"><code>exact_match</code> metric</a>, auxiliary arguments such as <code>ignore_case</code>, <code>ignore_punctuation</code>, <code>regexes_to_ignore</code> can be listed as well. They will be added to the metric function as <code>kwargs</code>. Some metrics have predefined values for <code>aggregation</code> and <code>higher_is_better</code> so listing the metric name only can be sufficient.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">metric_list</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">acc</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">metric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">exact_match</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">aggregation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mean</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nt">higher_is_better</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="nt">ignore_case</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="nt">ignore_punctuation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="nt">regexes_to_ignore</span><span class="p">:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;,&quot;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;\\$&quot;</span>
+</code></pre></div>
+<h3 id="natively-supported-metrics">Natively Supported Metrics<a class="headerlink" href="#natively-supported-metrics" title="Permanent link">&para;</a></h3>
+<p>Here we list all metrics currently supported natively in <code>lm-eval</code>:</p>
+<p>Metrics:</p>
+<ul>
+<li><code>acc</code> (accuracy)</li>
+<li><code>acc_norm</code> (length-normalized accuracy)</li>
+<li><code>acc_mutual_info</code> (baseline loglikelihood - normalized accuracy)</li>
+<li><code>perplexity</code></li>
+<li><code>word_perplexity</code> (perplexity per word)</li>
+<li><code>byte_perplexity</code> (perplexity per byte)</li>
+<li><code>bits_per_byte</code></li>
+<li><code>matthews_corrcoef</code> (Matthews correlation coefficient)</li>
+<li><code>f1</code> (F1 score)</li>
+<li><code>bleu</code></li>
+<li><code>chrf</code></li>
+<li><code>ter</code></li>
+</ul>
+<p>Aggregation functions:</p>
+<ul>
+<li><code>mean</code></li>
+<li><code>median</code></li>
+<li><code>perplexity</code></li>
+<li><code>weighted_perplexity</code></li>
+<li><code>bits_per_byte</code></li>
+</ul>
+<h3 id="adding-a-multiple-choice-metric">Adding a Multiple Choice Metric<a class="headerlink" href="#adding-a-multiple-choice-metric" title="Permanent link">&para;</a></h3>
+<p>Adding a multiple choice metric has a few steps. To get it working you need to:</p>
+<ol>
+<li>register a metric function</li>
+<li>register an aggregation function</li>
+<li>update the <code>Task</code> definition to make sure the correct arguments are passed</li>
+</ol>
+<p>The default metric and aggregation functions are in <code>lm_eval/api/metrics.py</code>, and you can add a function there if it's for general use. The metrics are towards the bottom of the file and look like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nd">@register_metric</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;mcc&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">higher_is_better</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">output_type</span><span class="o">=</span><span class="s2">&quot;multiple_choice&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">aggregation</span><span class="o">=</span><span class="s2">&quot;matthews_corrcoef&quot;</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">mcc_fn</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>  <span class="c1"># This is a passthrough function</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="k">return</span> <span class="n">items</span>
+</code></pre></div>
+<p>Note that many of these are passthrough functions, and for multiple choice (at least) this function is never actually called.</p>
+<p>Aggregation functions are defined towards the top of the file, here's an example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nd">@register_aggregation</span><span class="p">(</span><span class="s2">&quot;matthews_corrcoef&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">matthews_corrcoef</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">unzipped_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">))</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">golds</span> <span class="o">=</span> <span class="n">unzipped_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">preds</span> <span class="o">=</span> <span class="n">unzipped_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="k">return</span> <span class="n">sklearn</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">matthews_corrcoef</span><span class="p">(</span><span class="n">golds</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+</code></pre></div>
+<p>This function returns a single numeric value. The input is defined in <code>Task.process_results</code> in <code>lm_eval/api/task.py</code>. There's a section that looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">result_dict</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="o">**</span><span class="p">({</span><span class="s2">&quot;acc&quot;</span><span class="p">:</span> <span class="n">acc</span><span class="p">}</span> <span class="k">if</span> <span class="s2">&quot;acc&quot;</span> <span class="ow">in</span> <span class="n">use_metric</span> <span class="k">else</span> <span class="p">{}),</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="o">**</span><span class="p">({</span><span class="s2">&quot;f1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">)}</span> <span class="k">if</span> <span class="s2">&quot;f1&quot;</span> <span class="ow">in</span> <span class="n">use_metric</span> <span class="k">else</span> <span class="p">{}),</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="o">**</span><span class="p">({</span><span class="s2">&quot;mcc&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">)}</span> <span class="k">if</span> <span class="s2">&quot;mcc&quot;</span> <span class="ow">in</span> <span class="n">use_metric</span> <span class="k">else</span> <span class="p">{}),</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="o">**</span><span class="p">({</span><span class="s2">&quot;acc_norm&quot;</span><span class="p">:</span> <span class="n">acc_norm</span><span class="p">}</span> <span class="k">if</span> <span class="s2">&quot;acc_norm&quot;</span> <span class="ow">in</span> <span class="n">use_metric</span> <span class="k">else</span> <span class="p">{}),</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>    <span class="o">**</span><span class="p">({</span><span class="s2">&quot;exact_match&quot;</span><span class="p">:</span> <span class="n">exact_match</span><span class="p">}</span> <span class="k">if</span> <span class="s2">&quot;exact_match&quot;</span> <span class="ow">in</span> <span class="n">use_metric</span> <span class="k">else</span> <span class="p">{}),</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>The value here determines the input to the aggregation function, though the name used matches the metric function. These metrics all have simple needs and just need the accuracy or gold and predicted values, but immediately below this there are examples of metrics with more complicated needs you can use as reference.</p>
+<h2 id="good-reference-tasks">Good Reference Tasks<a class="headerlink" href="#good-reference-tasks" title="Permanent link">&para;</a></h2>
+<p>Contributing a new task can be daunting! Luckily, much of the work has often been done for you in a different, similarly evaluated task. Good examples of task implementations to study include:</p>
+<p>Multiple choice tasks:</p>
+<ul>
+<li>SciQ (<code>lm_eval/tasks/sciq/sciq.yaml</code>)</li>
+</ul>
+<p>Corpus perplexity evaluations:</p>
+<ul>
+<li>Wikitext (<code>lm_eval/tasks/wikitext/wikitext.yaml</code>)</li>
+</ul>
+<p>Generative tasks:</p>
+<ul>
+<li>GSM8k (<code>lm_eval/tasks/gsm8k/gsm8k.yaml</code>)</li>
+</ul>
+<p>Tasks using complex filtering:</p>
+<ul>
+<li>GSM8k with CoT (+ with Self-Consistency): (<code>lm_eval/tasks/gsm8k/gsm8k-cot.yaml</code> ; <code>lm_eval/tasks/gsm8k/gsm8k-cot-self-consistency.yaml</code>)</li>
+</ul>
+<h1 id="group-configuration">Group Configuration<a class="headerlink" href="#group-configuration" title="Permanent link">&para;</a></h1>
+<p>When evaluating a language model, it is not unusual to test across a number of tasks that may not be related to one another in order to assess a variety of capabilities. To this end, it may be cumbersome to have to list the set of tasks or add a new group name to each yaml of each individual task.</p>
+<p>To solve this, we can create a <strong>group</strong> yaml config. This is a config that contains the names of the tasks that should be included in a particular group. The config consists of two main keys: a <code>group</code> key which denotes the name of the group (as it would be called from the command line, e.g. <code>mmlu</code>) and a <code>task</code> key which is where we can list the tasks. The tasks listed in <code>task</code> are the task names that have been registered. A good example of a group yaml config can be found at [../lm_eval/tasks/mmlu/default/_mmlu.yaml]. See also the <a href="../new_task_guide/">New Task Guide</a> for a more in-depth and tutorial-esque explanation of how to write complex GroupConfigs.</p>
+<h2 id="configurations_1">Configurations<a class="headerlink" href="#configurations_1" title="Permanent link">&para;</a></h2>
+<p>Groups are configured via the <code>GroupConfig</code> object. Below, we describe all fields usable within the object, and their role in defining a task.</p>
+<h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>group</strong> (<code>str</code>, defaults to <code>None</code>) — name of the group. Used to invoke it from the command line.</li>
+<li><strong>group_alias</strong> (<code>str</code>, defaults to <code>None</code>) - Alternative name for the group that will be printed in the table output.</li>
+<li><strong>task</strong> (<code>Union[str, list]</code>, defaults to <code>None</code>) - List of tasks that constitute the group.</li>
+<li><strong>aggregate_metric_list</strong> (<code>list</code>, defaults to <code>None</code>) - similar to <code>metric_list</code> in TaskConfigs, provide a list of configurations for metrics that should be aggregated across subtasks. Leaving empty will result in no aggregation being performed for this group. Keys for each list entry are:</li>
+<li><code>metric: str</code> - the name of the metric to aggregate over (all subtasks must report a metric holding this name.)</li>
+<li><code>aggregation: str</code> - what aggregation function to apply to aggregate these per-subtask metrics. <strong>currently, only <code>mean</code> is supported.</strong></li>
+<li><code>weight_by_size: bool = True</code> whether to perform micro- averaging (<code>True</code>) or macro- (<code>False</code>) averaging of subtasks' accuracy scores when reporting the group's metric. MMLU, for example, averages over per-document accuracies (the <em>micro average</em>), resulting in the same accuracy as if one simply concatenated all 57 subjects into a single dataset and evaluated accuracy on that dataset.</li>
+<li><code>filter_list: Union[str, List[str]] = "none"</code> - what filter keys one should match on to aggregate results. For example, if trying to aggregate over the <code>exact_match</code> metric using <code>strict-match</code> filter for <code>bbh_cot_zeroshot</code>, then set this to be <code>filter_list: "strict-match"</code>.  </li>
+<li><strong>metadata</strong> (<code>dict</code>, <em>optional</em>) - As with TaskConfigs, a field where extra config metadata can be passed. set the <code>num_fewshot</code> key within this to override the printed n_shot value in a results table for your group, for example.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.expand", "navigation.indexes", "navigation.top", "search.highlight", "search.share", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
